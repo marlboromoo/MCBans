@@ -3,6 +3,7 @@ package com.mcbans.firestar.mcbans.request;
 import static com.mcbans.firestar.mcbans.I18n._;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -86,45 +87,67 @@ public class Ban implements Runnable {
 
     @Override
     public void run() {
-        while (plugin.apiServer == null) {
-            // waiting for server select
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {}
-        }
-        if (responses.containsKey(action)) {
-            action_id = responses.get(action);
-
-            // Call BanEvent
-            if (action_id != 3){
-                PlayerBanEvent banEvent = new PlayerBanEvent(playerName, playerIP, senderName, reason, action_id, duration, measure);
-                plugin.getServer().getPluginManager().callEvent(banEvent);
-                if (banEvent.isCancelled()){
-                    return;
+        try{
+            if (!checkRequest()){
+                return;
+            }
+            while (plugin.apiServer == null) {
+                // waiting for server select
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {}
+            }
+            if (responses.containsKey(action)) {
+                action_id = responses.get(action);
+    
+                // Call BanEvent
+                if (action_id != 3){
+                    PlayerBanEvent banEvent = new PlayerBanEvent(playerName, playerIP, senderName, reason, action_id, duration, measure);
+                    plugin.getServer().getPluginManager().callEvent(banEvent);
+                    if (banEvent.isCancelled()){
+                        return;
+                    }
+                    senderName = banEvent.getSenderName();
+                    reason = banEvent.getReason();
+                    action_id = banEvent.getActionID();
+                    duration = banEvent.getDuration();
+                    measure = banEvent.getMeasure();
                 }
-                senderName = banEvent.getSenderName();
-                reason = banEvent.getReason();
-                action_id = banEvent.getActionID();
-                duration = banEvent.getDuration();
-                measure = banEvent.getMeasure();
+    
+                switch (action_id) {
+                    case 0:
+                        globalBan();
+                        break;
+                    case 1:
+                        localBan();
+                        break;
+                    case 2:
+                        tempBan();
+                        break;
+                    case 3:
+                        unBan();
+                        break;
+                }
+            } else {
+                log.warning("Error, caught invalid action! Another plugin using mcbans improperly?");
             }
-
-            switch (action_id) {
-                case 0:
-                    globalBan();
-                    break;
-                case 1:
-                    localBan();
-                    break;
-                case 2:
-                    tempBan();
-                    break;
-                case 3:
-                    unBan();
-                    break;
+        } finally {
+            plugin.banningPlayers.remove(this.playerName.toLowerCase(Locale.ENGLISH));
+        }
+    }
+    synchronized private boolean checkRequest(){
+        final String name = this.playerName.toLowerCase(Locale.ENGLISH);
+        final Long time = plugin.banningPlayers.get(name);
+        if (time != null){
+            if (System.currentTimeMillis() >= time * 10000L){ // 10 secs
+                plugin.banningPlayers.put(name, System.currentTimeMillis());
+                return true;
+            }else{
+                return false;
             }
-        } else {
-            log.warning("Error, caught invalid action! Another plugin using mcbans improperly?");
+        }else{
+            plugin.banningPlayers.put(name, System.currentTimeMillis());
+            return true;
         }
     }
 
