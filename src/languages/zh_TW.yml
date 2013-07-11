@@ -2,26 +2,26 @@
 
 unBanSuccess: "%PLAYER% 已從黑名單移除!"
 unBanError: "將 %PLAYER% 從黑名單移除時發生錯誤!"
-unBanGroup: "%PLAYER% 已被你其他伺服器加入黑名單了!"
+unBanGroup: "%PLAYER% 已被你的群組加入黑名單了!"
 unBanNot: "%PLAYER% 並沒有被加入黑名單!"
 
 localBanPlayer: "你已被禁止進入伺服器, 請到 MCBans.com 確認"
 localBanSuccess: "將 %PLAYER% 加入黑名單 [%REASON%]"
 localBanError: "將 %PLAYER% 加入黑名單時發生錯誤!"
-localBanGroup: "%PLAYER% 已被你其他伺服器加入黑名單了!"
+localBanGroup: "%PLAYER% 已被你的群組加入黑名單了!"
 localBanAlready: "%PLAYER% 已被加入黑名單!"
 
 globalBanPlayer: "你已被禁止進入伺服器, 請到 MCBans.com 確認"
 globalBanSuccess: "將 %PLAYER% 加入黑名單 [%REASON%]"
 globalBanError: "將 %PLAYER% 加入黑名單時發生錯誤!"
 globalBanWarning: "將 %PLAYER% 加入黑名單時發生錯誤! 含有錯誤的字 - %BADWORD%"
-globalBanGroup: "%PLAYER% 已被你其他伺服器加入黑名單了!"
+globalBanGroup: "%PLAYER% 已被你的群組加入黑名單了!"
 globalBanAlready: "%PLAYER% 已被加入黑名單!"
 
 tempBanPlayer: "%REASON%"
 tempBanSuccess: "將 %PLAYER% 加入黑名單(暫時) [%REASON%]"
 tempBanError: "將 %PLAYER% 加入黑名單時發生錯誤!"
-tempBanGroup: "%PLAYER% 已被你其他伺服器加入黑名單了!"
+tempBanGroup: "%PLAYER% 已被你的群組加入黑名單了!"
 tempBanAlready: "%PLAYER% 已被加入黑名單(暫時) !"
 
 kickPlayer: "%REASON%"
